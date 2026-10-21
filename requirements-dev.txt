@@ -1,0 +1,11 @@
+# StoryToBook - development and test tooling.
+#
+#   python -m pip install -r requirements.txt -r requirements-dev.txt
+#
+# The heavy optional extras (Whisper, torch, diffusers, ...) are deliberately
+# not listed: the test-suite exercises the offline code paths, and installing
+# several gigabytes of model runtimes on every machine is not worth it.
+
+pytest>=8.0
+pytest-cov
+ruff

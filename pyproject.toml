@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "storytobook"
+version = "1.0.0"
+description = "Turn a spoken story into a finished, typeset book."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "StoryToBook contributors" }]
+keywords = ["story", "audio", "transcription", "ebook", "pdf", "epub", "gui"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Win32 (MS Windows)",
+    "Environment :: X11 Applications",
+    "Environment :: MacOS X",
+    "Intended Audience :: End Users/Desktop",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Multimedia :: Sound/Audio :: Capture/Recording",
+    "Topic :: Text Processing :: Markup",
+]
+dependencies = [
+    "customtkinter>=5.2",
+    "fpdf2>=2.7.4",
+    "Pillow>=10.0",
+    "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+audio = ["sounddevice>=0.4.6"]
+transcription = ["openai-whisper>=20231117"]
+cover = [
+    "torch>=2.0",
+    "diffusers>=0.24",
+    "transformers>=4.35",
+    "accelerate>=0.24",
+]
+cloud = ["openai>=1.0"]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov",
+    "ruff",
+]
+
+[project.scripts]
+storytobook = "storytobook.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/Manohargov/StoryToBookApp"
+Repository = "https://github.com/Manohargov/StoryToBookApp"
+Issues = "https://github.com/Manohargov/StoryToBookApp/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = ["E501"]

@@ -1,11 +1,19 @@
-customtkinter>=5.2.0
-sounddevice>=0.4.6
-numpy>=1.24.0
-scipy>=1.10.0
-openai-whisper>=20231117
+# StoryToBook - required dependencies.
+#
+# The interface (customtkinter), the PDF renderer (fpdf2), the image library
+# used for cover art (Pillow) and the array library used while recording
+# (numpy).  These four are the only packages the app cannot run without.
+#
+# Optional features are declared as extras in pyproject.toml:
+#
+#   pip install -e ".[audio]"           microphone recording
+#   pip install -e ".[transcription]"   local Whisper transcription
+#   pip install -e ".[cover]"            local Stable Diffusion cover art
+#   pip install -e ".[cloud]"            OpenAI transcription and images
+#
+# Development tooling lives in requirements-dev.txt.
+
+customtkinter>=5.2
 fpdf2>=2.7.4
-torch>=2.0.0
-diffusers>=0.24.0
-transformers>=4.35.0
-accelerate>=0.24.0
-Pillow>=10.0.0
+Pillow>=10.0
+numpy>=1.24

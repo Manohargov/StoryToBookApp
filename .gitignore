@@ -1,0 +1,54 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+pip-wheel-metadata/
+
+# Test and lint caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.*
+
+# Application output
+output/
+temp/
+
+# Model weights (LoRA adapters are large binaries)
+fine_tuned_model/*.safetensors
+fine_tuned_model/*.bin
+fine_tuned_model/*.pt
+
+# Stray placeholder files that were committed by accident
+x
+core/x
+fine_tuned_model/x
