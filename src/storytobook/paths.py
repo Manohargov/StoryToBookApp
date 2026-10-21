@@ -14,11 +14,20 @@ from pathlib import Path
 
 APP_NAME = "StoryToBook"
 
+#: True when running from a PyInstaller bundle.
+FROZEN = bool(getattr(sys, "frozen", False))
+
 #: Root of the installed package (``src/storytobook``).
 PACKAGE_ROOT = Path(__file__).resolve().parent
 
 #: Repository root when running from a source checkout.
 PROJECT_ROOT = PACKAGE_ROOT.parent.parent
+
+
+def bundle_dir() -> Path | None:
+    """Directory a frozen application unpacks itself into, if any."""
+    meipass = getattr(sys, "_MEIPASS", None)
+    return Path(meipass) if meipass else None
 
 
 def _data_root() -> Path:
@@ -57,6 +66,9 @@ def logs_dir() -> Path:
 
 def assets_dir() -> Path:
     """Bundled assets shipped with the source checkout (fonts, LoRA adapters)."""
+    if FROZEN:
+        root = bundle_dir()
+        return (root / "assets") if root else Path.cwd() / "assets"
     return PROJECT_ROOT / "assets"
 
 

@@ -71,6 +71,30 @@ sample project, then walks through every screen and writes one PNG per view.
 
 ## Install
 
+### Download a build
+
+Pre-built installers are published on the
+[Releases page](https://github.com/Manohargov/StoryToBookApp/releases).
+
+| Platform | File | What it is |
+|---|---|---|
+| Windows | `StoryToBook-<version>-windows-x64-setup.exe` | The installer. Run it, and the app is added to the Start Menu with an uninstaller. |
+| Windows | `StoryToBook-<version>-windows-x64.zip` | The portable build. Unpack it and run `StoryToBook.exe`. |
+| macOS | `StoryToBook-<version>-macos-<arch>.dmg` | Drag `StoryToBook.app` into Applications. |
+| macOS | `StoryToBook-<version>-macos-<arch>.zip` | The raw application bundle. |
+
+The macOS build is not signed with an Apple Developer ID, so the first launch
+shows a Gatekeeper warning. Choose *right click -> Open*, or run
+`xattr -cr /Applications/StoryToBook.app`.
+
+The installers contain the editor, the built-in cover designer and the PDF,
+EPUB and HTML exporters. The optional AI engines are **not** bundled because
+of their size - install Whisper or Stable Diffusion separately, or point the
+app at the OpenAI cloud engines from the Settings screen. Everything else
+works out of the box, including recording.
+
+### Install from source
+
 Python 3.10 or newer is required (the app is developed on 3.14).
 
 ```bash
@@ -102,6 +126,59 @@ PYTHONPATH=src python -m storytobook
 # Windows PowerShell
 $env:PYTHONPATH="src"; python -m storytobook
 ```
+
+## Building the installers yourself
+
+Both platforms are built with [PyInstaller](https://pyinstaller.org/). The
+release workflow does this on GitHub's runners, so you do not need a Mac to
+produce a Mac build.
+
+```bash
+# Windows
+python -m pip install pyinstaller
+python packaging/build_windows.py
+
+# macOS
+python -m pip install pyinstaller
+python packaging/build_macos.py
+```
+
+| Script | Produces |
+|---|---|
+| `packaging/build_windows.py` | `dist/StoryToBook/` and `dist/StoryToBook-<version>-windows-x64.zip` |
+| `packaging/build_macos.py` | `dist/StoryToBook.app`, a `.dmg` and a `.zip` |
+| `packaging/make_icon.py` | The application icon (`.ico` and `.icns`) |
+| `packaging/storytobook.spec` | The PyInstaller specification |
+| `packaging/storytobook.iss` | The Inno Setup installer script |
+| `packaging/verify_exe.py` | Screenshots a running build, to prove it starts |
+
+The Windows installer additionally needs
+[Inno Setup 6](https://jrsoftware.org/isdl.php) (`choco install innosetup`).
+Without it, the portable folder and the zip are still produced.
+
+Every build runs a self test against the frozen executable before it is
+packaged, so a broken bundle never reaches a release:
+
+```bash
+dist/StoryToBook/StoryToBook.exe --selftest
+```
+
+```
+StoryToBook self test
+----------------------------------------
+  chaptering    : 2 chapters
+  cover art     : adventure, 50842 bytes
+  export pdf    : 49789 bytes
+  export epub   : 3383 bytes
+  export html   : 2810 bytes
+  interface     : customtkinter available
+----------------------------------------
+All checks passed.
+```
+
+To build a single file executable instead of a folder, set
+`STORYTOBOOK_ONEFILE=1`. To leave `sounddevice` (and the bundled PortAudio
+library) out, set `STORYTOBOOK_BUNDLE_AUDIO=0`.
 
 ## Optional extras
 
@@ -332,6 +409,14 @@ StoryToBookApp/
 │   ├── screenshot.py
 │   ├── screenshot_seeded.py
 │   └── smoke_ui.py
+├── packaging/
+│   ├── build_macos.py         # the .app bundle, a .dmg and a .zip
+│   ├── build_windows.py       # the folder build and the portable zip
+│   ├── launcher.py            # the entry point PyInstaller analyses
+│   ├── make_icon.py           # generates the .ico and the .icns
+│   ├── storytobook.iss        # the Inno Setup installer script
+│   ├── storytobook.spec       # the PyInstaller specification
+│   └── verify_exe.py          # proves a frozen build starts
 ├── tests/
 ├── docs/screenshots/
 ├── fine_tuned_model/              # placeholder for a LoRA adapter

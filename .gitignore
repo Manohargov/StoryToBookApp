@@ -43,6 +43,11 @@ Thumbs.db
 output/
 temp/
 
+# Build artifacts
+build/
+dist/
+*.manifest
+
 # Model weights (LoRA adapters are large binaries)
 fine_tuned_model/*.safetensors
 fine_tuned_model/*.bin
